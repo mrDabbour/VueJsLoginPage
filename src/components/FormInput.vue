@@ -1,12 +1,53 @@
 <template>
   <div class="form-labels">
-    <label class="form-label" for="username">Username</label>
+    <label class="form-label" :for="name">{{ name }}</label>
 
-    <div class="form-error">error</div>
+    <div class="form-error">{{ error }}</div>
   </div>
-  <input class="form-input" type="text" id="username" />
+  <input v-model="value" class="form-input" :type="type" :id="name" />
+  {{ value }}
 </template>
 
+<script>
+export default {
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      default() {
+        return "text";
+      },
+    },
+    rules: {
+      type: Object,
+      default() {
+        return {};
+      },
+    },
+  },
+  data() {
+    return {
+      value: "",
+    };
+  },
+computed: {
+  error() {
+    if (this.rules.required && this.value.length === 0) {
+      return "Required";
+    }
+    if(this.rules.min && this.value.length < this.rules.min){
+        return `Min length is ${this.rules.min}`;
+    }
+     else {
+      return ""; // Provide a default value when there's no error
+    }
+  },
+},
+};
+</script>
 <style scoped>
 .form-labels {
   display: flex;
@@ -15,7 +56,7 @@
 
 .form-error {
   color: tomato;
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .form-input {

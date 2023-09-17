@@ -2,8 +2,8 @@
   <h1>Login Form using VueJs</h1>
 
   <form class="form">
-    <form-input></form-input>
-    <form-input></form-input>
+    <form-input :rules="username.rules" type="text" name="Username"></form-input>
+    <form-input :rules="password.rules" type="password" name="Password"></form-input>
     <form-button text="Login Now" :disabled="false"></form-button>
   </form>
 </template>
@@ -16,6 +16,22 @@ export default {
   components: {
     FormInput,
     FormButton,
+  },
+  data(){
+    return{
+      username:{
+        rules:{
+          required:true,
+          min:6,
+        },
+      },
+      password:{
+        rules:{
+          required:true,
+          min:8,
+        },
+      },
+    };
   },
 };
 </script>
