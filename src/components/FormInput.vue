@@ -1,16 +1,19 @@
 <template>
   <div class="form-labels">
     <label class="form-label" :for="name">{{ name }}</label>
-
-    <div class="form-error">{{ error }}</div>
+    <div class="form-error">{{ errorMessage }}</div>
   </div>
-  <input v-model="value" class="form-input" :type="type" :id="name" />
-  {{ value }}
+  <input :value="inputValue" @input="input" class="form-input" :type="type" :id="name" />
 </template>
 
 <script>
 export default {
+  emits: [`updateValue`],
   props: {
+    value: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -30,24 +33,33 @@ export default {
   },
   data() {
     return {
-      value: "",
+      inputValue: "",
     };
   },
-computed: {
-  error() {
-    if (this.rules.required && this.value.length === 0) {
-      return "Required";
-    }
-    if(this.rules.min && this.value.length < this.rules.min){
-        return `Min length is ${this.rules.min}`;
-    }
-     else {
-      return ""; // Provide a default value when there's no error
-    }
+  methods: {
+    input($event) {
+      this.$emit("updateValue", {
+        value: $event.target.value,
+      });
+      this.inputValue = $event.target.value;
+      console.log($event.target.value);
+    },
   },
-},
+  computed: {
+    errorMessage() {
+      if (this.rules.required && this.inputValue.length === 0) {
+        return "Required";
+      }
+      if (this.rules.min && this.inputValue.length < this.rules.min) {
+        return `Min length is ${this.rules.min}`;
+      } else {
+        return "";
+      }
+    },
+  },
 };
 </script>
+
 <style scoped>
 .form-labels {
   display: flex;

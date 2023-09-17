@@ -2,9 +2,22 @@
   <h1>Login Form using VueJs</h1>
 
   <form class="form">
-    <form-input :rules="username.rules" type="text" name="Username"></form-input>
-    <form-input :rules="password.rules" type="password" name="Password"></form-input>
-    <form-button text="Login Now" :disabled="false"></form-button>
+    <form-input
+      :value="username.value"
+      :error="username.error"
+      :rules="username.rules"
+      type="text"
+      name="Username"
+      @updateValue="update"
+    ></form-input>
+    <form-input
+      :value="password.value"
+      :error="password.error"
+      :rules="password.rules"
+      type="password"
+      name="Password"
+    ></form-input>
+    <form-button text="Login Now" :disabled="!isValid"></form-button>
   </form>
 </template>
 
@@ -17,21 +30,36 @@ export default {
     FormInput,
     FormButton,
   },
-  data(){
-    return{
-      username:{
-        rules:{
-          required:true,
-          min:6,
+  data() {
+    return {
+      username: {
+        value: "name",
+        rules: {
+          required: true,
+          min: 6,
         },
+        error: "",
       },
-      password:{
-        rules:{
-          required:true,
-          min:8,
+      password: {
+        value: "12345678",
+        rules: {
+          required: true,
+          min: 8,
         },
+        error: "",
       },
     };
+  },
+  methods:{
+    update(value){
+      console.log(`from app.vue`);
+      console.log(value);
+    },
+  },
+  computed: {
+    isValid() {
+      return !this.username.error && !this.password.error;
+    },
   },
 };
 </script>
